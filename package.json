@@ -1,0 +1,30 @@
+{
+  "name": "korayozcan-me",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview --port 4321",
+    "test": "vitest run",
+    "test:e2e": "npm run build && playwright test",
+    "cv:pdf": "npm run build && node scripts/export-cv-pdf.mjs"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "astro": "^7.3.5",
+    "satori": "^0.35.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "gray-matter": "^4.0.3",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.3"
+  }
+}
