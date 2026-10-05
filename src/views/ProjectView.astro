@@ -1,0 +1,65 @@
+---
+import { render } from 'astro:content';
+import Split from '../layouts/Split.astro';
+import FlowDiagram from '../components/FlowDiagram.astro';
+import type { Project } from '../lib/content';
+import { entrySlug } from '../lib/entries';
+import { localizedPath } from '../i18n/routes';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  project: Project;
+}
+
+interface LinkItem {
+  readonly href: string;
+  readonly label: string;
+}
+
+const { lang, project } = Astro.props;
+const { Content } = await render(project);
+const { title, summary, stack, status, year, flow, links } = project.data;
+const slug = entrySlug(project.id);
+const supportLabel = lang === 'tr' ? 'Gizlilik politikası' : 'Privacy policy';
+const linkItems: readonly LinkItem[] = [
+  ...(links.appStore ? [{ href: links.appStore, label: 'App Store' }] : []),
+  ...(links.site ? [{ href: links.site, label: supportLabel }] : []),
+  ...(links.repo ? [{ href: links.repo, label: 'GitHub' }] : []),
+];
+---
+<Split lang={lang} route={{ name: 'project', slug }} title={title} description={summary}>
+  <article>
+    <a class="more back" href={`${localizedPath(lang, { name: 'home' })}#projects`}>{t(lang, 'project.back')}</a>
+    <header class="head">
+      <p class="period">{year}{status === 'live' && <span class="badge">{t(lang, 'project.live')}</span>}</p>
+      <h1 class="page-title">{title}</h1>
+      <p class="lead-lg">{summary}</p>
+      <ul class="tags">{stack.map((s) => <li>{s.toLowerCase()}</li>)}</ul>
+    </header>
+
+    <section aria-labelledby="architecture">
+      <h2 id="architecture" class="label">{t(lang, 'project.architecture')}</h2>
+      <FlowDiagram steps={flow} />
+    </section>
+
+    <div class="prose"><Content /></div>
+
+    {linkItems.length > 0 && (
+      <section class="links-block" aria-labelledby="links">
+        <h2 id="links" class="label">{t(lang, 'project.links')}</h2>
+        <ul class="link-list mono">
+          {linkItems.map((link) => <li><a href={link.href} rel="noopener">{link.label} ↗</a></li>)}
+        </ul>
+      </section>
+    )}
+  </article>
+</Split>
+
+<style>
+  .back { margin: 0 0 2rem; }
+  .head { margin-bottom: 3rem; }
+  .links-block { margin-top: 3rem; }
+  .link-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; font-size: .875rem; color: var(--accent-text); }
+  .link-list a { display: inline-block; padding: .25rem 0; }
+</style>

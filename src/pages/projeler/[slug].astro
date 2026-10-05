@@ -1,0 +1,17 @@
+---
+import ProjectView from '../../views/ProjectView.astro';
+import { getProjects, type Project } from '../../lib/content';
+import { entrySlug } from '../../lib/entries';
+
+export async function getStaticPaths() {
+  const projects = await getProjects('tr');
+  return projects.map((project) => ({ params: { slug: entrySlug(project.id) }, props: { project } }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+<ProjectView lang="tr" project={project} />

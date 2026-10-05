@@ -1,0 +1,17 @@
+---
+interface Props {
+  steps: readonly string[];
+}
+
+const { steps } = Astro.props;
+---
+<ol class="flow mono">
+  {steps.map((step) => <li>{step}</li>)}
+</ol>
+
+<style>
+  .flow { list-style: none; margin: 0 0 3rem; padding: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 1.6rem; font-size: .8125rem; }
+  li { position: relative; border: 1px solid var(--border); background: var(--surface); padding: .55rem .9rem; color: var(--text-strong); }
+  li:not(:last-child)::after { content: '↓'; position: absolute; left: 1rem; bottom: -1.5rem; color: var(--accent-text); }
+  li:last-child { border-color: var(--accent); }
+</style>
