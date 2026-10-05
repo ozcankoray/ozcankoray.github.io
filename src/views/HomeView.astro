@@ -7,6 +7,7 @@ import PostList from '../components/PostList.astro';
 import { profile } from '../data/profile';
 import { experience } from '../data/cv';
 import { getPosts, getProjects } from '../lib/content';
+import { personJsonLd } from '../lib/jsonld';
 import { localizedPath } from '../i18n/routes';
 import { t, type Lang } from '../i18n/ui';
 
@@ -23,6 +24,7 @@ const sections =
     : (['about', 'experience', 'projects'] as const);
 ---
 <Split lang={lang} route={{ name: 'home' }} title={profile.name} description={profile.intro[lang]}>
+  <script type="application/ld+json" set:html={personJsonLd(lang)} />
   <SectionNav slot="nav" lang={lang} sections={sections} />
 
   <section id="about" class="section" aria-labelledby="about-label">

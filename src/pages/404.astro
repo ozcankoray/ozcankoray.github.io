@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base lang="tr" route={null} title="404" description="Sayfa bulunamadı / Page not found">
+  <main id="main" class="not-found">
+    <p class="label">404</p>
+    <h1 class="page-title">Sayfa bulunamadı</h1>
+    <p class="lead-lg" lang="en">Page not found.</p>
+    <p class="mono links"><a href="/">← ana sayfa</a> · <a href="/en/" lang="en">← home</a></p>
+  </main>
+</Base>
+
+<style>
+  .not-found { max-width: 40rem; margin: 0 auto; padding: 8rem 1.25rem; }
+  .links { margin-top: 2rem; font-size: .875rem; color: var(--accent-text); }
+</style>
