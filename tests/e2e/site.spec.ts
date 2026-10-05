@@ -87,3 +87,13 @@ test('pages have no render-blocking external stylesheets', async ({ page }) => {
     await expect(page.locator('link[rel="stylesheet"]'), route.path).toHaveCount(0);
   }
 });
+
+test('profile README links point to real pages', async ({ request }) => {
+  const readme = readFileSync(join('github', 'profile', 'README.md'), 'utf8');
+  const paths = [...readme.matchAll(/https:\/\/korayozcan\.me(\/[^\s)]*)/g)].map((m) => m[1] ?? '/');
+  expect(paths.length).toBeGreaterThan(3);
+  for (const path of paths) {
+    const res = await request.get(path);
+    expect(res.status(), path).toBe(200);
+  }
+});
