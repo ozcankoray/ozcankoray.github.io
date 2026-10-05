@@ -1,0 +1,23 @@
+---
+import Split from '../layouts/Split.astro';
+import PostList from '../components/PostList.astro';
+import { getPosts } from '../lib/content';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const posts = await getPosts(lang);
+---
+<Split lang={lang} route={{ name: 'writing' }} title={t(lang, 'writing.title')} description={t(lang, 'writing.description')}>
+  <h1 class="page-title">{t(lang, 'writing.title')}</h1>
+  <p class="lead-lg intro-text">{t(lang, 'writing.description')}</p>
+  {posts.length > 0 ? <PostList lang={lang} posts={posts} /> : <p class="empty mono">{t(lang, 'writing.empty')}</p>}
+</Split>
+
+<style>
+  .intro-text { margin-bottom: 2.5rem; }
+  .empty { color: var(--faint); font-size: .875rem; }
+</style>
