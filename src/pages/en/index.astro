@@ -1,0 +1,7 @@
+---
+import Split from '../../layouts/Split.astro';
+import { profile } from '../../data/profile';
+---
+<Split lang="en" route={{ name: 'home' }} title={profile.name} description={profile.intro.en}>
+  <p>{profile.about[0]?.en}</p>
+</Split>

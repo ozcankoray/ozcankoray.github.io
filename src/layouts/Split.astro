@@ -1,0 +1,25 @@
+---
+import Base from './Base.astro';
+import Intro from '../components/Intro.astro';
+import type { Lang } from '../i18n/ui';
+import type { Route } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  route: Route;
+  title: string;
+  description: string;
+}
+
+const { lang, route, title, description } = Astro.props;
+---
+<Base lang={lang} route={route} title={title} description={description}>
+  <div class="split">
+    <header class="intro">
+      <Intro lang={lang} route={route}><slot name="nav" /></Intro>
+    </header>
+    <main id="main" class="content" tabindex="-1">
+      <slot />
+    </main>
+  </div>
+</Base>

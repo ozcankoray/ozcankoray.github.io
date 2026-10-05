@@ -1,0 +1,23 @@
+---
+import { OTHER, t, type Lang } from '../i18n/ui';
+import { localizedPath, type Route } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  route: Route;
+}
+
+const { lang, route } = Astro.props;
+const other = OTHER[lang];
+---
+<nav class="lang" aria-label={t(lang, 'lang.label')}>
+  <span class="current">{lang.toUpperCase()}</span>
+  <span aria-hidden="true">/</span>
+  <a href={localizedPath(other, route)} hreflang={other} lang={other} aria-label={t(lang, 'lang.switch')}>{other.toUpperCase()}</a>
+</nav>
+
+<style>
+  .lang { display: flex; gap: .4rem; }
+  .current { color: var(--text-strong); }
+  a { padding: .25rem 0; }
+</style>

@@ -1,6 +1,7 @@
 ---
+import Split from '../layouts/Split.astro';
+import { profile } from '../data/profile';
 ---
-<html lang="tr">
-  <head><meta charset="utf-8" /><title>Koray Özcan</title></head>
-  <body><h1>Koray Özcan</h1></body>
-</html>
+<Split lang="tr" route={{ name: 'home' }} title={profile.name} description={profile.intro.tr}>
+  <p>{profile.about[0]?.tr}</p>
+</Split>

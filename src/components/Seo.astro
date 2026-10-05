@@ -1,0 +1,41 @@
+---
+import { OG_LOCALE, OTHER, t, type Lang } from '../i18n/ui';
+import { localizedPath, ogImagePath, rssPath, type Route } from '../i18n/routes';
+import { profile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  route: Route | null;
+  title: string;
+  description: string;
+}
+
+const { lang, route, title, description } = Astro.props;
+const site = Astro.site ?? new URL(profile.site);
+const abs = (path: string): string => new URL(path, site).toString();
+const fullTitle = title === profile.name ? title : `${title} — ${profile.name}`;
+---
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+{route ? (
+  <>
+    <link rel="canonical" href={abs(localizedPath(lang, route))} />
+    <link rel="alternate" hreflang="tr" href={abs(localizedPath('tr', route))} />
+    <link rel="alternate" hreflang="en" href={abs(localizedPath('en', route))} />
+    <link rel="alternate" hreflang="x-default" href={abs(localizedPath('tr', route))} />
+    <meta property="og:url" content={abs(localizedPath(lang, route))} />
+    <meta property="og:image" content={abs(ogImagePath(lang, route))} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+  </>
+) : (
+  <meta name="robots" content="noindex" />
+)}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={profile.name} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:locale" content={OG_LOCALE[lang]} />
+<meta property="og:locale:alternate" content={OG_LOCALE[OTHER[lang]]} />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="alternate" type="application/rss+xml" title={`${profile.name} — ${t(lang, 'writing.title')}`} href={rssPath(lang)} />

@@ -1,0 +1,42 @@
+---
+import { profile } from '../data/profile';
+import { t, type Lang } from '../i18n/ui';
+import { cvPdfPath, localizedPath, type Route } from '../i18n/routes';
+import LangSwitch from './LangSwitch.astro';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  lang: Lang;
+  route: Route;
+}
+
+const { lang, route } = Astro.props;
+const NameTag = route.name === 'home' ? 'h1' : 'p';
+---
+<div class="intro-inner">
+  <NameTag class="name"><a href={localizedPath(lang, { name: 'home' })}>{profile.name}</a></NameTag>
+  <p class="role mono">{profile.roleMono[lang]}</p>
+  <p class="lead">{profile.intro[lang]}</p>
+  <slot />
+  <ul class="links mono">
+    <li><a href={profile.github} rel="me">GitHub</a></li>
+    <li><a href={profile.linkedin} rel="me">LinkedIn</a></li>
+    <li><a href={`mailto:${profile.email}`}>{t(lang, 'links.email')}</a></li>
+    <li><a href={cvPdfPath(lang)} download>{t(lang, 'cv.download')}</a></li>
+  </ul>
+  <div class="controls mono">
+    <LangSwitch lang={lang} route={route} />
+    <ThemeToggle lang={lang} />
+  </div>
+</div>
+
+<style>
+  .intro-inner { display: flex; flex-direction: column; height: 100%; }
+  .name { margin: 0; font-size: clamp(2.25rem, 5vw, 3rem); font-weight: 800; letter-spacing: -.035em; line-height: 1.05; color: var(--text-strong); }
+  .role { margin: .75rem 0 1rem; font-size: .8125rem; color: var(--accent-text); }
+  .lead { margin: 0; max-width: 22rem; color: var(--muted); }
+  .links { list-style: none; display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin: 2rem 0 0; padding: 0; font-size: .8125rem; color: var(--muted); }
+  .links a { display: inline-block; padding: .25rem 0; }
+  .controls { display: flex; gap: 1.25rem; align-items: center; margin-top: 1rem; font-size: .75rem; color: var(--faint); }
+  @media (min-width: 900px) { .links { margin-top: auto; } }
+</style>

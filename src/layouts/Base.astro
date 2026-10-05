@@ -1,0 +1,40 @@
+---
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/800.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import { t, type Lang } from '../i18n/ui';
+import type { Route } from '../i18n/routes';
+
+interface Props {
+  lang: Lang;
+  route: Route | null;
+  title: string;
+  description: string;
+}
+
+const { lang, route, title, description } = Astro.props;
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      try {
+        var saved = localStorage.getItem('theme');
+        if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+      } catch (e) {}
+    </script>
+    <Seo lang={lang} route={route} title={title} description={description} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t(lang, 'skip')}</a>
+    <slot />
+  </body>
+</html>

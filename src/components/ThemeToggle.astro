@@ -1,0 +1,41 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+<button type="button" class="theme-toggle" data-theme-toggle hidden aria-label={t(lang, 'theme.toggle')}>◐</button>
+
+<script>
+  const root = document.documentElement;
+
+  const current = (): 'light' | 'dark' => {
+    const set = root.dataset.theme;
+    if (set === 'light' || set === 'dark') return set;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]')) {
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      const next = current() === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('theme', next);
+      } catch {
+        // Storage unavailable (private mode, blocked): keep the in-page choice only.
+      }
+    });
+  }
+</script>
+
+<style>
+  .theme-toggle {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    font: inherit; padding: .1rem .5rem; cursor: pointer; min-height: 1.75rem;
+  }
+  .theme-toggle:hover { color: var(--text-strong); border-color: var(--faint); }
+</style>
