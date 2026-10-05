@@ -16,7 +16,7 @@
 - `trailingSlash: 'always'`: every internal page link ends with `/`. File links (`.pdf`, `.png`, `.xml`) do not.
 - TR is the default language at `/`; EN lives under `/en/`. Path segments: `projeler`↔`projects`, `yazilar`↔`writing`, `cv`↔`cv`. Content slugs are identical in both languages.
 - The phone number (`0000000000`, any formatting) and home address (`REDACTED`) must never appear in `src/`, `public/`, `github/`, or `dist/`. Contact is email `korayozcan33@gmail.com` and LinkedIn only.
-- Never create anything under the `/nerdio/` path: `korayozcan.me/nerdio/` is served by the separate `nerdio` repo's Pages site (Nerdi's App Store privacy/support URL).
+- Nerdi's privacy policy lives at `https://nerdi.pages.dev/privacy.html` (the URL used on its App Store listing). The `nerdio` repo is a different, inactive app and is not featured, linked or pinned.
 - Exactly three projects: `kap-fund-analytics`, `nerdi`, `food-inflation-tracker`. No GitHub links to private repos.
 - Color tokens are fixed exactly as written in Task 5. Fonts are Inter + JetBrains Mono from @fontsource only.
 - No analytics and no third-party runtime scripts.
@@ -30,7 +30,7 @@
 2. **Language parity:** a project or post that exists in only one language makes the language switch 404. Expect every page to have its twin. Pinned by the parity test in `tests/unit/content.test.ts` (Task 4) and the hreflang link crawl (Task 11).
 3. **Turkish glyphs (ı ğ ş İ):** missing from OG images, which are rendered with subset fonts. Expect real outlines, not tofu. Pinned by `tests/unit/og.test.ts` (Task 10).
 4. **Storage blocked or JS disabled:** the theme still follows the OS, content is fully readable, and nothing throws. Pinned by `tests/e2e/layout.spec.ts` (Task 5).
-5. **Switching Pages to Actions breaks `korayozcan.me/nerdio/`:** expect it to keep returning 200. Pinned by the `dist` check in Task 11 and the post-deploy check in Task 12.
+5. **Switching Pages from legacy to Actions loses the custom domain or HTTPS:** expect `https://korayozcan.me/` to return 200 and plain HTTP to redirect. Pinned by `public/CNAME` in the build plus the post-deploy check in Task 12.
 
 ---
 
@@ -971,11 +971,11 @@ describe('projects', () => {
     }
   });
 
-  it('never links to a GitHub repo except the public nerdio pages', () => {
+  it('never links to a GitHub repo (featured repos are private)', () => {
     for (const lang of LANGS) {
       for (const file of filesIn('projects', lang)) {
         const raw = readFileSync(join(ROOT, 'projects', lang, file), 'utf8');
-        expect(raw).not.toMatch(/github\.com\/ozcankoray\/(?!nerdio)/);
+        expect(raw).not.toMatch(/github\.com\/ozcankoray\//);
       }
     }
   });
@@ -1156,7 +1156,7 @@ order: 2
 flow: [OpenAlex, Daily selection, Nerdi iPhone app, On-device library, Nerdi Plus sync]
 links:
   appStore: https://apps.apple.com/us/app/nerdi-research-papers/id6813826387
-  site: https://korayozcan.me/nerdio/
+  site: https://nerdi.pages.dev/privacy.html
 ---
 
 ## Problem
@@ -1184,7 +1184,7 @@ order: 2
 flow: [OpenAlex, Günlük seçki, Nerdi iPhone uygulaması, Cihazdaki kütüphane, Nerdi Plus senkron]
 links:
   appStore: https://apps.apple.com/us/app/nerdi-research-papers/id6813826387
-  site: https://korayozcan.me/nerdio/
+  site: https://nerdi.pages.dev/privacy.html
 ---
 
 ## Problem
@@ -2174,10 +2174,10 @@ for (const lang of ['tr', 'en'] as const) {
   }
 }
 
-test('Nerdi links to the App Store and its support pages', async ({ page }) => {
+test('Nerdi links to the App Store and its privacy policy', async ({ page }) => {
   await page.goto('/en/projects/nerdi/');
   await expect(page.locator('a[href^="https://apps.apple.com/"]')).toHaveCount(1);
-  await expect(page.locator('a[href="https://korayozcan.me/nerdio/"]')).toHaveCount(1);
+  await expect(page.locator('a[href="https://nerdi.pages.dev/privacy.html"]')).toHaveCount(1);
   await expect(page.locator('.badge')).toHaveText('LIVE · APP STORE');
 });
 
@@ -2250,7 +2250,7 @@ const { lang, project } = Astro.props;
 const { Content } = await render(project);
 const { title, summary, stack, status, year, flow, links } = project.data;
 const slug = entrySlug(project.id);
-const supportLabel = lang === 'tr' ? 'Gizlilik ve destek' : 'Privacy & support';
+const supportLabel = lang === 'tr' ? 'Gizlilik politikası' : 'Privacy policy';
 const linkItems: readonly LinkItem[] = [
   ...(links.appStore ? [{ href: links.appStore, label: 'App Store' }] : []),
   ...(links.site ? [{ href: links.site, label: supportLabel }] : []),
@@ -3263,7 +3263,7 @@ test('every internal link, alternate and og image resolves', async ({ context, r
   );
   const paths = [...new Set(perPage.flat().map(toInternalPath).filter((p): p is string => p !== null && p !== ''))];
   expect(paths.length).toBeGreaterThan(20);
-  for (const path of paths.filter((p) => !p.startsWith('/nerdio/'))) {
+  for (const path of paths) {
     const res = await request.get(path);
     expect(res.status(), path).toBe(200);
   }
@@ -3306,13 +3306,7 @@ test('built site contains no private contact data', () => {
     expect(/0000000000|506\s*102\s*77\s*57|REDACTED/i.test(text), file).toBe(false);
   }
 });
-
-test('build does not shadow the nerdio project site', () => {
-  expect(existsSync(join('dist', 'nerdio'))).toBe(false);
-});
 ```
-
-`/nerdio/` links are excluded from the crawl on purpose: that path is served by a different repo in production and doesn't exist in local preview. It is checked after deploy in Task 12.
 
 - [ ] **Step 2: Run the tests**
 
@@ -3423,7 +3417,7 @@ If `git rm CNAME` fails because there is no root CNAME after the merge, skip tha
 
 - [ ] **Step 6: ⛔ Ask Koray for approval**, then switch Pages to the Actions build
 
-Message to Koray: "Ready to switch Pages for `ozcankoray.github.io` from legacy to GitHub Actions and push `main`. The site may 404 for 1–2 minutes until the first deploy finishes. `korayozcan.me/nerdio/` is served by the nerdio repo and should be unaffected. Proceed?"
+Message to Koray: "Ready to switch Pages for `ozcankoray.github.io` from legacy to GitHub Actions and push `main`. The site may 404 for 1–2 minutes until the first deploy finishes. Proceed?"
 
 Only after a clear yes:
 ```bash
@@ -3449,12 +3443,12 @@ gh api -X PUT repos/ozcankoray/ozcankoray.github.io/pages -F https_enforced=true
 - [ ] **Step 9: Verify production**
 
 ```bash
-for p in / /en/ /cv/ /en/projects/nerdi/ /cv/koray-ozcan-cv-tr.pdf /og/tr/home.png /nerdio/ /nerdio/privacy.html; do
+for p in / /en/ /cv/ /en/projects/nerdi/ /cv/koray-ozcan-cv-tr.pdf /og/tr/home.png; do
   printf '%s ' "$p"; curl -s -o /dev/null -w '%{http_code}\n' "https://korayozcan.me$p"
 done
 curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://korayozcan.me/
 ```
-Expected: every path returns `200`, including both `/nerdio/` paths. The plain-HTTP request returns `301` to `https://korayozcan.me/`.
+Expected: every path returns `200`. The plain-HTTP request returns `301` to `https://korayozcan.me/`.
 
 ---
 
@@ -3516,7 +3510,7 @@ git commit -m "docs: add GitHub profile README" -m "Co-Authored-By: Claude Opus 
 
 - [ ] **Step 5: ⛔ Ask Koray for approval**, then publish the profile repo, push the site repo, and update the profile
 
-Message to Koray: "Ready to (1) push the README commit to `ozcankoray.github.io`; (2) create the public repo `ozcankoray/ozcankoray` with this README; (3) set your GitHub bio to 'Computer engineer · test automation & QA at Sompo Sigorta · data, finance & iOS', website `https://korayozcan.me` and location Istanbul; (4) update the descriptions and topics of `ozcankoray.github.io` and `nerdio`. Proceed with all four, or which ones?"
+Message to Koray: "Ready to (1) push the README commit to `ozcankoray.github.io`; (2) create the public repo `ozcankoray/ozcankoray` with this README; (3) set your GitHub bio to 'Computer engineer · test automation & QA at Sompo Sigorta · data, finance & iOS', website `https://korayozcan.me` and location Istanbul; (4) update the description and topics of `ozcankoray.github.io`. Proceed with all four, or which ones?"
 
 For (3), the token needs the `user` scope. Ask Koray to run: `! gh auth refresh -h github.com -s user`
 
@@ -3534,7 +3528,6 @@ gh repo create ozcankoray/ozcankoray --public --description "Profile README" --s
 gh api -X PATCH /user -f bio="Computer engineer · test automation & QA at Sompo Sigorta · data, finance & iOS" -f blog="https://korayozcan.me" -f location="Istanbul"
 
 gh repo edit ozcankoray/ozcankoray.github.io --description "Source of korayozcan.me — bilingual personal site built with Astro" --homepage "https://korayozcan.me" --add-topic astro --add-topic portfolio --add-topic personal-website
-gh repo edit ozcankoray/nerdio --description "Privacy policy and support pages for the Nerdi iPhone app" --homepage "https://korayozcan.me/nerdio/" --add-topic ios --add-topic app-store
 ```
 
 - [ ] **Step 6: Verify**
@@ -3547,7 +3540,7 @@ Expected: the new values, and `"visibility":"public"`.
 
 - [ ] **Step 7: Pins (manual: GitHub has no API for pinning)**
 
-Tell Koray: open https://github.com/ozcankoray → "Customize your pins" → pin `ozcankoray.github.io`, `nerdio`, `KorayOzcan_testAutomation`, plus any other public repo he wants to show (`marketfiyatlistesi`, `tuikverisiotomasyon`).
+Tell Koray: open https://github.com/ozcankoray → "Customize your pins" → pin `ozcankoray.github.io`, `KorayOzcan_testAutomation`, plus any other public repo he wants to show (`marketfiyatlistesi`, `tuikverisiotomasyon`).
 
 ---
 
@@ -3555,7 +3548,7 @@ Tell Koray: open https://github.com/ozcankoray → "Customize your pins" → pin
 
 Before the first public deploy, show Koray the TR and EN home, all three project pages and the CV at `npm run preview`. Ask him to confirm three things:
 1. **About text:** it assumes he has graduated (2026).
-2. **Project claims:** KAP "validated and audited runs", Food Inflation "basket, weights, base period", Nerdi feature list.
+2. **Project claims:** KAP "validated and audited runs", Food Inflation "basket, weights, base period", Nerdi feature list and stack (`iOS, OpenAlex, In-app subscriptions`).
 3. **TR translations of the LinkedIn bullets.**
 
 Apply any corrections as `fix:` commits with passing tests before deploying.

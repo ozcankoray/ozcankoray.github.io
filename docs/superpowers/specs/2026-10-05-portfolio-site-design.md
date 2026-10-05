@@ -58,7 +58,7 @@ Bullets are taken from LinkedIn and translated to Turkish.
 ### Featured projects (exactly three)
 
 1. **KAP Fund Analytics** (capstone): a containerized FastAPI + SvelteKit + TimescaleDB app. A deterministic PyMuPDF pipeline parses unstructured KAP fund PDFs into structured time series. Repo is private, so there is no GitHub link.
-2. **Nerdi: Research Papers**: iOS app, live on the App Store (https://apps.apple.com/us/app/nerdi-research-papers/id6813826387). A few real papers a day from OpenAlex, with original abstracts and no AI summaries; 12 fields; Nerdi Plus subscription. Links: App Store, privacy/support pages (public `nerdio` repo).
+2. **Nerdi: Research Papers**: iOS app, live on the App Store (https://apps.apple.com/us/app/nerdi-research-papers/id6813826387). A few real papers a day from OpenAlex, with original abstracts and no AI summaries; 12 fields; Nerdi Plus subscription. Links: App Store, privacy policy (`https://nerdi.pages.dev/privacy.html`). The `nerdio` repo belongs to a different, inactive app and is not used.
 3. **Food Inflation Tracker**: collects prices from the marketfiyati.org.tr API on a schedule and computes TÜİK-style food inflation. Repo is private, so there is no GitHub link.
 
 No other projects appear on the site.
@@ -115,14 +115,13 @@ Left column on every page: name, role line, short intro, nav (home only), links,
 - GitHub Actions (`withastro/action` + `actions/deploy-pages`) build and deploy on push to `main`.
 - Pages build type switches from legacy to workflow. `public/CNAME` = `korayozcan.me`. "Enforce HTTPS" is turned on once the certificate is issued.
 - DNS is already pointing (Pages status: built). It is verified, not changed.
-- `korayozcan.me/nerdio/` is served by the separate `nerdio` repo (Nerdi's App Store privacy/support URL). The site must never create a `/nerdio/` path, and the URL is verified after every deploy.
 
 ## 7. GitHub profile (light touch)
 
 - New public repo `ozcankoray/ozcankoray` with a profile README: name and role, 2–3 line intro, the three projects (one line each, linking to their site pages), and links to the site, LinkedIn and CV. No stats widgets, no badge walls.
 - Profile fields: bio (one line), website `https://korayozcan.me`, location Istanbul.
-- Pins: `ozcankoray.github.io`, `nerdio`, `KorayOzcan_testAutomation`, plus any other public repo Koray chooses.
-- `nerdio` and `ozcankoray.github.io` get clean descriptions and topics.
+- Pins: `ozcankoray.github.io`, `KorayOzcan_testAutomation`, plus any other public repo Koray chooses.
+- `ozcankoray.github.io` gets a clean description and topics.
 - No repo is deleted, archived or made public as part of this work.
 
 ## 8. Testing & quality
