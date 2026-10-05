@@ -53,6 +53,7 @@ Bullets are taken from LinkedIn and translated to Turkish.
 
 - Programs: YÖK Data Analysis School (AI track); TÖDEB & Marmara University "Fintek Çırağı".
 - Languages: Turkish (native), English (C1).
+- Skills (CV page only): Python, C++, SQL, Test Automation, Deep Learning, Agile, Jira, Confluence, Documentation.
 
 ### Featured projects (exactly three)
 
@@ -62,7 +63,7 @@ Bullets are taken from LinkedIn and translated to Turkish.
 
 No other projects appear on the site.
 
-Each project page follows the same structure: Problem → Approach → Architecture (inline SVG diagram) → Results / what I learned → Links. Screenshots are supplied by Koray; until they exist, a styled placeholder is used, never a fake image.
+Each project page follows the same structure: header → Architecture (a vertical flow diagram built as an accessible HTML `<ol>`) → Problem → Approach → What I learned → Links. Screenshots are supplied by Koray; until they exist, a styled placeholder is used, never a fake image.
 
 ### About text and first blog post
 
@@ -94,7 +95,7 @@ Left column on every page: name, role line, short intro, nav (home only), links,
 
 ## 5. Technical architecture
 
-- **Framework:** Astro 5, static output, TypeScript strict. No UI framework.
+- **Framework:** Astro 7, static output, TypeScript strict, `trailingSlash: 'always'`. No UI framework.
 - **Styling:** plain CSS with tokens in `src/styles/tokens.css`. Theme comes from `prefers-color-scheme` and can be overridden with a toggle via `data-theme` on `<html>`. The override is saved in `localStorage`; reads and writes are wrapped in try/catch.
 - **Content:**
   - `src/content/projects/{tr,en}/*.md`: frontmatter `title, summary, year, stack[], links{appStore?, site?, repo?}, status ('live' | 'complete'), order, cover?`.
@@ -102,7 +103,7 @@ Left column on every page: name, role line, short intro, nav (home only), links,
   - `src/data/cv.ts`: typed experience/education/programs/languages with `{ tr, en }` strings.
   - `src/i18n/ui.ts`: UI strings, plus `t(lang, key)` and `localizedPath(lang, route)` helpers.
   - Schemas are validated with Zod in `src/content.config.ts`; the build fails on invalid content.
-- **i18n:** Astro i18n routing with `defaultLocale: 'tr'`, `locales: ['tr','en']`, and `prefixDefaultLocale: false`. The language switch maps to the equivalent page through a route table, so slugs can differ per language. Each page has `<link rel="alternate" hreflang>` tags and `x-default`.
+- **i18n:** Astro i18n routing with `defaultLocale: 'tr'`, `locales: ['tr','en']`, and `prefixDefaultLocale: false`. The language switch maps to the equivalent page through a route table; path segments are translated (`projeler`/`projects`, `yazilar`/`writing`) while content slugs are identical across languages. Every project and post must exist in both languages. Each page has `<link rel="alternate" hreflang>` tags and `x-default`.
 - **JS (inline and small):** theme toggle, plus IntersectionObserver-based active nav on the home page.
 - **SEO:** a `<Seo>` component (title, description, canonical, OG/Twitter), OG images generated at build time (satori + resvg) per page, `@astrojs/sitemap`, `@astrojs/rss` per language, and JSON-LD `Person` on home.
 - **Analytics:** none at launch.
@@ -114,6 +115,7 @@ Left column on every page: name, role line, short intro, nav (home only), links,
 - GitHub Actions (`withastro/action` + `actions/deploy-pages`) build and deploy on push to `main`.
 - Pages build type switches from legacy to workflow. `public/CNAME` = `korayozcan.me`. "Enforce HTTPS" is turned on once the certificate is issued.
 - DNS is already pointing (Pages status: built). It is verified, not changed.
+- `korayozcan.me/nerdio/` is served by the separate `nerdio` repo (Nerdi's App Store privacy/support URL). The site must never create a `/nerdio/` path, and the URL is verified after every deploy.
 
 ## 7. GitHub profile (light touch)
 
