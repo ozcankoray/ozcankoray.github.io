@@ -80,3 +80,10 @@ test('built site contains no private contact data', () => {
     expect(/0000000000|506\s*102\s*77\s*57|REDACTED/i.test(text), file).toBe(false);
   }
 });
+
+test('pages have no render-blocking external stylesheets', async ({ page }) => {
+  for (const route of ROUTES) {
+    await page.goto(route.path);
+    await expect(page.locator('link[rel="stylesheet"]'), route.path).toHaveCount(0);
+  }
+});
