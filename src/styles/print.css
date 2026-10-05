@@ -1,0 +1,26 @@
+.print-only { display: none; }
+
+@media print {
+  :root,
+  :root:not([data-theme='light']),
+  :root[data-theme='dark'] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --border: #cccccc;
+    --text: #111111;
+    --text-strong: #000000;
+    --muted: #333333;
+    --faint: #555555;
+    --accent: #000000;
+    --accent-text: #000000;
+    --accent-ink: #ffffff;
+    color-scheme: light;
+  }
+  @page { size: A4; }
+  body { font-size: 10.5pt; line-height: 1.45; }
+  .intro, .skip-link, .cv-actions, [data-print], .back { display: none !important; }
+  .split { display: block; max-width: none; padding: 0; }
+  .content { padding: 0; }
+  .print-only { display: block; }
+  .cv-xp > li, .cv-edu > li { break-inside: avoid; }
+}

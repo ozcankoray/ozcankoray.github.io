@@ -1,0 +1,97 @@
+---
+import Split from '../layouts/Split.astro';
+import { education, experience, KIND_LABEL, languages, programs, skills } from '../data/cv';
+import { profile } from '../data/profile';
+import { formatPeriod } from '../lib/format';
+import { cvPdfPath } from '../i18n/routes';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+<Split lang={lang} route={{ name: 'cv' }} title={t(lang, 'cv.title')} description={t(lang, 'cv.description')}>
+  <div class="cv">
+    <header class="cv-head">
+      <div class="print-only">
+        <p class="print-name">{profile.name} — {t(lang, 'role')}</p>
+        <p class="mono">{profile.email} · korayozcan.me · linkedin.com/in/korayözcan</p>
+      </div>
+      <h1 class="page-title">{t(lang, 'cv.title')}</h1>
+      <div class="cv-actions mono">
+        <a href={cvPdfPath(lang)} download>{t(lang, 'cv.download')}</a>
+        <button type="button" data-print hidden>{t(lang, 'cv.print')}</button>
+      </div>
+    </header>
+
+    <section class="block" aria-labelledby="cv-xp">
+      <h2 id="cv-xp" class="label">{t(lang, 'cv.experience')}</h2>
+      <ol class="cv-xp">
+        {experience.map((x) => (
+          <li>
+            <div class="row-head">
+              <h3 class="title-strong">{x.role[lang]} · {x.company}</h3>
+              <span class="period">{formatPeriod(x.start, x.end, lang)}</span>
+            </div>
+            <p class="kind mono">{KIND_LABEL[x.kind][lang]}</p>
+            {x.bullets.length > 0 && <ul class="bullets">{x.bullets.map((b) => <li>{b[lang]}</li>)}</ul>}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="cv-edu">
+      <h2 id="cv-edu" class="label">{t(lang, 'cv.education')}</h2>
+      <ol class="cv-edu">
+        {education.map((e) => (
+          <li>
+            <div class="row-head">
+              <h3 class="title-strong">{e.degree[lang]}</h3>
+              <span class="period">{e.start} → {e.end}</span>
+            </div>
+            <p class="kind mono">{e.school[lang]} · GPA {e.gpa}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="cv-programs">
+      <h2 id="cv-programs" class="label">{t(lang, 'cv.programs')}</h2>
+      <ul class="plain">{programs.map((p) => <li>{p[lang]}</li>)}</ul>
+    </section>
+
+    <section class="block" aria-labelledby="cv-skills">
+      <h2 id="cv-skills" class="label">{t(lang, 'cv.skills')}</h2>
+      <ul class="tags">{skills.map((s) => <li>{s.toLowerCase()}</li>)}</ul>
+    </section>
+
+    <section class="block" aria-labelledby="cv-langs">
+      <h2 id="cv-langs" class="label">{t(lang, 'cv.languages')}</h2>
+      <ul class="plain">{languages.map((l) => <li>{l.name[lang]} — {l.level[lang]}</li>)}</ul>
+    </section>
+  </div>
+</Split>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-print]')) {
+    button.hidden = false;
+    button.addEventListener('click', () => window.print());
+  }
+</script>
+
+<style>
+  .cv-head { margin-bottom: 3rem; }
+  .print-name { font-size: 1.25rem; font-weight: 800; color: var(--text-strong); margin: 0; }
+  .cv-actions { display: flex; gap: 1.25rem; align-items: center; font-size: .8125rem; color: var(--accent-text); }
+  .cv-actions button { background: none; border: 1px solid var(--border); color: var(--muted); font: inherit; padding: .2rem .6rem; cursor: pointer; }
+  .block { margin-bottom: 2.75rem; }
+  .cv-xp, .cv-edu { list-style: none; margin: 0; padding: 0; display: grid; gap: 1.5rem; }
+  .row-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem 1rem; align-items: baseline; }
+  h3 { margin: 0; font-size: 1rem; }
+  .kind { margin: .15rem 0 0; font-size: .75rem; color: var(--muted); }
+  .bullets { margin: .5rem 0 0; padding-left: 1.1rem; color: var(--text); font-size: .9375rem; }
+  .bullets li { margin-bottom: .25rem; }
+  .plain { margin: 0; padding-left: 1.1rem; }
+</style>
