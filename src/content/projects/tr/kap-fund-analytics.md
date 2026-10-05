@@ -4,6 +4,7 @@ summary: KAP'ta PDF olarak yayımlanan fon raporlarını yapılandırılmış, s
 year: 2026
 stack: [Python, PyMuPDF, FastAPI, SvelteKit, TimescaleDB, Docker]
 status: complete
+kind: project
 order: 1
 flow: [KAP PDF raporları, PyMuPDF ayrıştırıcı, Doğrulama ve denetim, TimescaleDB, FastAPI, SvelteKit arayüz]
 links: {}

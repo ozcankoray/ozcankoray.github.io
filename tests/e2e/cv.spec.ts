@@ -13,6 +13,8 @@ for (const cv of PAGES) {
     await expect(page.locator('.cv-xp > li')).toHaveCount(6);
     await expect(page.locator('.cv-edu > li')).toHaveCount(2);
     await expect(page.locator('.cv-xp > li').first()).toContainText('Sompo Sigorta');
+    await expect(page.locator('#cv-jobs-list > li')).toHaveCount(2);
+    await expect(page.locator('#cv-internships-list > li')).toHaveCount(4);
   });
 
   test(`CV ${cv.lang} PDF is downloadable`, async ({ request }) => {

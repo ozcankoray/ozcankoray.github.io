@@ -4,6 +4,7 @@ summary: An iPhone app that serves a few real research papers a day — original
 year: 2026
 stack: [iOS, OpenAlex, In-app subscriptions]
 status: live
+kind: app
 order: 2
 flow: [OpenAlex, Daily selection, Nerdi iPhone app, On-device library, Nerdi Plus sync]
 links:

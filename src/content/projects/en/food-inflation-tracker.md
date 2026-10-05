@@ -4,6 +4,7 @@ summary: Measures food inflation from regularly collected supermarket prices, wi
 year: 2026
 stack: [Python, marketfiyati.org.tr API, Scheduled jobs]
 status: complete
+kind: project
 order: 3
 flow: [marketfiyati.org.tr API, Scheduled collection, Price history, Basket & weights, Food inflation index]
 links: {}

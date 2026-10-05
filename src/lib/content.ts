@@ -5,8 +5,11 @@ import { entryLang } from './entries';
 export type Project = CollectionEntry<'projects'>;
 export type Post = CollectionEntry<'blog'>;
 
-export async function getProjects(lang: Lang): Promise<readonly Project[]> {
-  const all = await getCollection('projects', (entry) => entryLang(entry.id) === lang);
+export async function getProjects(lang: Lang, kind?: Project['data']['kind']): Promise<readonly Project[]> {
+  const all = await getCollection(
+    'projects',
+    (entry) => entryLang(entry.id) === lang && (kind === undefined || entry.data.kind === kind),
+  );
   return [...all].sort((a, b) => a.data.order - b.data.order);
 }
 

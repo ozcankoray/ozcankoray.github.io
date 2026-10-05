@@ -45,6 +45,13 @@ describe('projects', () => {
     expect(filesIn('projects', 'tr')).toEqual(['food-inflation-tracker.md', 'kap-fund-analytics.md', 'nerdi.md']);
   });
 
+  it('marks only Nerdi as a mobile app, in both languages', () => {
+    for (const lang of LANGS) {
+      const apps = filesIn('projects', lang).filter((f) => frontmatter('projects', lang, f).kind === 'app');
+      expect(apps).toEqual(['nerdi.md']);
+    }
+  });
+
   it('has unique order values per language', () => {
     for (const lang of LANGS) {
       const orders = filesIn('projects', lang).map((f) => frontmatter('projects', lang, f).order);

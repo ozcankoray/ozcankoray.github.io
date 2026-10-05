@@ -7,27 +7,28 @@ import { t, type Lang } from '../i18n/ui';
 interface Props {
   lang: Lang;
   items: readonly Experience[];
+  showCvLink?: boolean;
 }
 
-const { lang, items } = Astro.props;
-const [first, ...rest] = items;
+const { lang, items, showCvLink = false } = Astro.props;
 ---
 <ol class="xp">
-  {first && (
-    <li class:list={['card', { 'is-current': first.end === null }]}>
-      <p class="period">{formatPeriod(first.start, first.end, lang)}</p>
-      <h3 class="title-strong">{first.role[lang]} · {first.company}</h3>
-      <ul class="tags">{first.tags.map((tag) => <li>{tag}</li>)}</ul>
-    </li>
+  {items.map((x) =>
+    x.end === null ? (
+      <li class="card is-current">
+        <p class="period">{formatPeriod(x.start, x.end, lang)}</p>
+        <h3 class="title-strong">{x.role[lang]} · {x.company}</h3>
+        <ul class="tags">{x.tags.map((tag) => <li>{tag}</li>)}</ul>
+      </li>
+    ) : (
+      <li class="xp-row">
+        <span class="period">{formatPeriod(x.start, x.end, lang)}</span>
+        <span class="title-strong">{x.role[lang]} · {x.company}</span>
+      </li>
+    ),
   )}
-  {rest.map((x) => (
-    <li class="xp-row">
-      <span class="period">{formatPeriod(x.start, x.end, lang)}</span>
-      <span class="title-strong">{x.role[lang]} · {x.company}</span>
-    </li>
-  ))}
 </ol>
-<a class="more" href={localizedPath(lang, { name: 'cv' })}>{t(lang, 'cv.full')}</a>
+{showCvLink && <a class="more" href={localizedPath(lang, { name: 'cv' })}>{t(lang, 'cv.full')}</a>}
 
 <style>
   .xp { list-style: none; margin: 0; padding: 0; display: grid; gap: .25rem; }

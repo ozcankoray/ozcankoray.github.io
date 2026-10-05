@@ -6,6 +6,7 @@ export const projectSchema = z.object({
   year: z.number().int().min(2020).max(2100),
   stack: z.array(z.string().min(1)).min(1),
   status: z.enum(['live', 'complete']),
+  kind: z.enum(['project', 'app']),
   order: z.number().int(),
   flow: z.array(z.string().min(1).max(28)).min(2).max(6),
   links: z

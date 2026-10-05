@@ -1,6 +1,6 @@
 ---
 import Split from '../layouts/Split.astro';
-import { education, experience, KIND_LABEL, languages, programs, skills } from '../data/cv';
+import { education, internships, jobs, KIND_LABEL, languages, programs, skills } from '../data/cv';
 import { profile } from '../data/profile';
 import { formatPeriod } from '../lib/format';
 import { cvPdfPath } from '../i18n/routes';
@@ -26,16 +26,31 @@ const { lang } = Astro.props;
       </div>
     </header>
 
-    <section class="block" aria-labelledby="cv-xp">
-      <h2 id="cv-xp" class="label">{t(lang, 'cv.experience')}</h2>
-      <ol class="cv-xp">
-        {experience.map((x) => (
+    <section class="block" aria-labelledby="cv-jobs">
+      <h2 id="cv-jobs" class="label">{t(lang, 'cv.experience')}</h2>
+      <ol class="cv-xp" id="cv-jobs-list">
+        {jobs.map((x) => (
           <li>
             <div class="row-head">
               <h3 class="title-strong">{x.role[lang]} · {x.company}</h3>
               <span class="period">{formatPeriod(x.start, x.end, lang)}</span>
             </div>
             <p class="kind mono">{KIND_LABEL[x.kind][lang]}</p>
+            {x.bullets.length > 0 && <ul class="bullets">{x.bullets.map((b) => <li>{b[lang]}</li>)}</ul>}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="cv-internships">
+      <h2 id="cv-internships" class="label">{t(lang, 'cv.internships')}</h2>
+      <ol class="cv-xp" id="cv-internships-list">
+        {internships.map((x) => (
+          <li>
+            <div class="row-head">
+              <h3 class="title-strong">{x.role[lang]} · {x.company}</h3>
+              <span class="period">{formatPeriod(x.start, x.end, lang)}</span>
+            </div>
             {x.bullets.length > 0 && <ul class="bullets">{x.bullets.map((b) => <li>{b[lang]}</li>)}</ul>}
           </li>
         ))}

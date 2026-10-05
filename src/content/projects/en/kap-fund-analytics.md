@@ -4,6 +4,7 @@ summary: Turns fund reports published on KAP as PDFs into structured, queryable 
 year: 2026
 stack: [Python, PyMuPDF, FastAPI, SvelteKit, TimescaleDB, Docker]
 status: complete
+kind: project
 order: 1
 flow: [KAP PDF reports, PyMuPDF parser, Validation & audit, TimescaleDB, FastAPI, SvelteKit UI]
 links: {}

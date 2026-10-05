@@ -1,11 +1,12 @@
 ---
 import Split from '../layouts/Split.astro';
 import SectionNav from '../components/SectionNav.astro';
+import type { SectionId } from '../components/sections';
 import ExperienceList from '../components/ExperienceList.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import PostList from '../components/PostList.astro';
 import { profile } from '../data/profile';
-import { experience } from '../data/cv';
+import { internships, jobs } from '../data/cv';
 import { getPosts, getProjects } from '../lib/content';
 import { personJsonLd } from '../lib/jsonld';
 import { localizedPath } from '../i18n/routes';
@@ -16,35 +17,55 @@ interface Props {
 }
 
 const { lang } = Astro.props;
-const projects = await getProjects(lang);
+const projects = await getProjects(lang, 'project');
+const apps = await getProjects(lang, 'app');
 const posts = (await getPosts(lang)).slice(0, 3);
-const sections =
-  posts.length > 0
-    ? (['about', 'experience', 'projects', 'writing'] as const)
-    : (['about', 'experience', 'projects'] as const);
+const sections: readonly SectionId[] = [
+  'about',
+  'experience',
+  'internships',
+  ...(projects.length > 0 ? (['projects'] as const) : []),
+  ...(apps.length > 0 ? (['apps'] as const) : []),
+  ...(posts.length > 0 ? (['writing'] as const) : []),
+];
+const number = (id: SectionId): string => String(sections.indexOf(id) + 1).padStart(2, '0');
 ---
 <Split lang={lang} route={{ name: 'home' }} title={profile.name} description={profile.intro[lang]}>
   <script type="application/ld+json" set:html={personJsonLd(lang)} />
   <SectionNav slot="nav" lang={lang} sections={sections} />
 
   <section id="about" class="section" aria-labelledby="about-label">
-    <h2 id="about-label" class="label">01 / {t(lang, 'nav.about')}</h2>
+    <h2 id="about-label" class="label">{number('about')} / {t(lang, 'nav.about')}</h2>
     {profile.about.map((paragraph) => <p class="about">{paragraph[lang]}</p>)}
   </section>
 
   <section id="experience" class="section" aria-labelledby="experience-label">
-    <h2 id="experience-label" class="label">02 / {t(lang, 'nav.experience')}</h2>
-    <ExperienceList lang={lang} items={experience} />
+    <h2 id="experience-label" class="label">{number('experience')} / {t(lang, 'nav.experience')}</h2>
+    <ExperienceList lang={lang} items={jobs} />
   </section>
 
-  <section id="projects" class="section" aria-labelledby="projects-label">
-    <h2 id="projects-label" class="label">03 / {t(lang, 'nav.projects')}</h2>
-    <div class="stack">{projects.map((project) => <ProjectCard lang={lang} project={project} />)}</div>
+  <section id="internships" class="section" aria-labelledby="internships-label">
+    <h2 id="internships-label" class="label">{number('internships')} / {t(lang, 'nav.internships')}</h2>
+    <ExperienceList lang={lang} items={internships} showCvLink />
   </section>
+
+  {projects.length > 0 && (
+    <section id="projects" class="section" aria-labelledby="projects-label">
+      <h2 id="projects-label" class="label">{number('projects')} / {t(lang, 'nav.projects')}</h2>
+      <div class="stack">{projects.map((project) => <ProjectCard lang={lang} project={project} />)}</div>
+    </section>
+  )}
+
+  {apps.length > 0 && (
+    <section id="apps" class="section" aria-labelledby="apps-label">
+      <h2 id="apps-label" class="label">{number('apps')} / {t(lang, 'nav.apps')}</h2>
+      <div class="stack">{apps.map((app) => <ProjectCard lang={lang} project={app} />)}</div>
+    </section>
+  )}
 
   {posts.length > 0 && (
     <section id="writing" class="section" aria-labelledby="writing-label">
-      <h2 id="writing-label" class="label">04 / {t(lang, 'nav.writing')}</h2>
+      <h2 id="writing-label" class="label">{number('writing')} / {t(lang, 'nav.writing')}</h2>
       <PostList lang={lang} posts={posts} />
       <a class="more" href={localizedPath(lang, { name: 'writing' })}>{t(lang, 'writing.all')}</a>
     </section>

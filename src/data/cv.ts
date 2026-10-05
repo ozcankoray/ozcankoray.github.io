@@ -166,6 +166,9 @@ export const experience: readonly Experience[] = [
   },
 ];
 
+export const jobs: readonly Experience[] = experience.filter((x) => x.kind !== 'internship');
+export const internships: readonly Experience[] = experience.filter((x) => x.kind === 'internship');
+
 export const education: readonly Education[] = [
   {
     degree: { tr: 'Bilgisayar Mühendisliği (İngilizce), Lisans', en: 'B.Sc. Computer Engineering (English)' },

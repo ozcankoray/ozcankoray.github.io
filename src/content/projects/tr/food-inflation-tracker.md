@@ -4,6 +4,7 @@ summary: Düzenli toplanan market fiyatlarından, TÜİK yöntemine benzer şeki
 year: 2026
 stack: [Python, marketfiyati.org.tr API, Zamanlanmış görevler]
 status: complete
+kind: project
 order: 3
 flow: [marketfiyati.org.tr API, Düzenli veri toplama, Fiyat geçmişi, Sepet ve ağırlıklar, Gıda enflasyonu endeksi]
 links: {}

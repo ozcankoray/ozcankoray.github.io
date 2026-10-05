@@ -12,10 +12,15 @@ for (const home of HOMES) {
       await page.goto(home.path);
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Koray Özcan');
       await expect(page.locator('#experience .is-current')).toContainText('Sompo Sigorta');
-      await expect(page.locator('#experience ol.xp > li')).toHaveCount(6);
-      await expect(page.locator('#projects article')).toHaveCount(3);
-      await expect(page.locator('#projects article').nth(1)).toContainText('Nerdi');
-      await expect(page.locator('#projects .badge')).toHaveCount(1);
+      await expect(page.locator('#experience ol.xp > li')).toHaveCount(2);
+      await expect(page.locator('#internships ol.xp > li')).toHaveCount(4);
+      await expect(page.locator('#internships .is-current')).toHaveCount(0);
+      await expect(page.locator('#projects article')).toHaveCount(2);
+      await expect(page.locator('#projects')).not.toContainText('Nerdi');
+      await expect(page.locator('#apps article')).toHaveCount(1);
+      await expect(page.locator('#apps article')).toContainText('Nerdi');
+      await expect(page.locator('#apps .badge')).toHaveCount(1);
+      await expect(page.locator('.section-nav a')).toHaveCount(5);
     });
 
     test('writing section matches the published posts', async ({ page }) => {
@@ -47,7 +52,7 @@ for (const home of HOMES) {
     test('full CV link points to the CV page', async ({ page }) => {
       await page.goto(home.path);
       const cv = home.lang === 'tr' ? '/cv/' : '/en/cv/';
-      await expect(page.locator(`#experience a[href="${cv}"]`)).toHaveCount(1);
+      await expect(page.locator(`#internships a[href="${cv}"]`)).toHaveCount(1);
     });
   });
 }

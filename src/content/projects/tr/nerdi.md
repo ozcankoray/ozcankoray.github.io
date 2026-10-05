@@ -4,6 +4,7 @@ summary: Her gün birkaç gerçek akademik makale sunan iPhone uygulaması — o
 year: 2026
 stack: [iOS, OpenAlex, Uygulama içi abonelik]
 status: live
+kind: app
 order: 2
 flow: [OpenAlex, Günlük seçki, Nerdi iPhone uygulaması, Cihazdaki kütüphane, Nerdi Plus senkron]
 links:

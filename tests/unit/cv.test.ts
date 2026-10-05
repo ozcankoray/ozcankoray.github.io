@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { education, experience, languages, programs, KIND_LABEL } from '../../src/data/cv';
+import { education, experience, internships, jobs, languages, programs, KIND_LABEL } from '../../src/data/cv';
 import { profile } from '../../src/data/profile';
 import { formatDate, formatPeriod, formatYearMonth } from '../../src/lib/format';
 
@@ -43,6 +43,13 @@ describe('cv data', () => {
     expect(experience[0]?.end).toBeNull();
     expect(experience[0]?.company).toBe('Sompo Sigorta');
     expect(experience.filter((x) => x.end === null)).toHaveLength(1);
+  });
+
+  it('splits experience into jobs and internships without losing any', () => {
+    expect(jobs.map((x) => x.id)).toEqual(['sompo-qa', 'bfrc-ra']);
+    expect(internships.map((x) => x.id)).toEqual(['odeal-ba', 'kontrolmatik-swe', 'eclit-psm', 'sompo-itgov']);
+    expect(internships.every((x) => x.kind === 'internship')).toBe(true);
+    expect(jobs.length + internships.length).toBe(experience.length);
   });
 
   it('ids are unique', () => {
