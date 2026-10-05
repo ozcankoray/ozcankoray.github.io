@@ -1,7 +1,4 @@
 ---
-import Split from '../layouts/Split.astro';
-import { profile } from '../data/profile';
+import HomeView from '../views/HomeView.astro';
 ---
-<Split lang="tr" route={{ name: 'home' }} title={profile.name} description={profile.intro.tr}>
-  <p>{profile.about[0]?.tr}</p>
-</Split>
+<HomeView lang="tr" />

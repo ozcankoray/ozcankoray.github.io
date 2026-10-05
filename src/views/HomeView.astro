@@ -1,0 +1,55 @@
+---
+import Split from '../layouts/Split.astro';
+import SectionNav from '../components/SectionNav.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostList from '../components/PostList.astro';
+import { profile } from '../data/profile';
+import { experience } from '../data/cv';
+import { getPosts, getProjects } from '../lib/content';
+import { localizedPath } from '../i18n/routes';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const projects = await getProjects(lang);
+const posts = (await getPosts(lang)).slice(0, 3);
+const sections =
+  posts.length > 0
+    ? (['about', 'experience', 'projects', 'writing'] as const)
+    : (['about', 'experience', 'projects'] as const);
+---
+<Split lang={lang} route={{ name: 'home' }} title={profile.name} description={profile.intro[lang]}>
+  <SectionNav slot="nav" lang={lang} sections={sections} />
+
+  <section id="about" class="section" aria-labelledby="about-label">
+    <h2 id="about-label" class="label">01 / {t(lang, 'nav.about')}</h2>
+    {profile.about.map((paragraph) => <p class="about">{paragraph[lang]}</p>)}
+  </section>
+
+  <section id="experience" class="section" aria-labelledby="experience-label">
+    <h2 id="experience-label" class="label">02 / {t(lang, 'nav.experience')}</h2>
+    <ExperienceList lang={lang} items={experience} />
+  </section>
+
+  <section id="projects" class="section" aria-labelledby="projects-label">
+    <h2 id="projects-label" class="label">03 / {t(lang, 'nav.projects')}</h2>
+    <div class="stack">{projects.map((project) => <ProjectCard lang={lang} project={project} />)}</div>
+  </section>
+
+  {posts.length > 0 && (
+    <section id="writing" class="section" aria-labelledby="writing-label">
+      <h2 id="writing-label" class="label">04 / {t(lang, 'nav.writing')}</h2>
+      <PostList lang={lang} posts={posts} />
+      <a class="more" href={localizedPath(lang, { name: 'writing' })}>{t(lang, 'writing.all')}</a>
+    </section>
+  )}
+</Split>
+
+<style>
+  .about { margin: 0 0 1rem; color: var(--muted); max-width: 40rem; }
+  .stack { display: grid; gap: .75rem; }
+</style>

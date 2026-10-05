@@ -1,0 +1,70 @@
+---
+import { t, type Lang } from '../i18n/ui';
+
+type SectionId = 'about' | 'experience' | 'projects' | 'writing';
+
+interface Props {
+  lang: Lang;
+  sections: readonly SectionId[];
+}
+
+const { lang, sections } = Astro.props;
+---
+<nav class="section-nav mono" aria-label={t(lang, 'nav.label')}>
+  <ol>
+    {sections.map((id, i) => (
+      <li>
+        <a href={`#${id}`} aria-current={i === 0 ? 'true' : undefined}>
+          {String(i + 1).padStart(2, '0')} <span class="marker" aria-hidden="true">▸</span> {t(lang, `nav.${id}`)}
+        </a>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script>
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('.section-nav a')];
+  const sections = links
+    .map((a) => document.getElementById(a.hash.slice(1)))
+    .filter((el): el is HTMLElement => el !== null);
+
+  const activeSection = (): HTMLElement | undefined => {
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    if (atBottom) return sections.at(-1);
+    const line = window.innerHeight * 0.4;
+    return sections.filter((s) => s.getBoundingClientRect().top <= line).at(-1) ?? sections[0];
+  };
+
+  const update = (): void => {
+    const active = activeSection();
+    for (const a of links) {
+      if (active && a.hash === `#${active.id}`) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    }
+  };
+
+  let queued = false;
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        update();
+      });
+    },
+    { passive: true },
+  );
+  update();
+</script>
+
+<style>
+  .section-nav { display: none; }
+  @media (min-width: 900px) { .section-nav { display: block; margin-top: 3rem; } }
+  ol { list-style: none; margin: 0; padding: 0; font-size: .8125rem; line-height: 2.4; }
+  a { color: var(--faint); }
+  a[aria-current='true'] { color: var(--text-strong); }
+  .marker { display: inline-block; width: 1em; color: var(--accent-text); visibility: hidden; }
+  a[aria-current='true'] .marker { visibility: visible; }
+</style>

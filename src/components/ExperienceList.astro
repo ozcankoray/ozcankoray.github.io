@@ -1,0 +1,39 @@
+---
+import type { Experience } from '../data/cv';
+import { formatPeriod } from '../lib/format';
+import { localizedPath } from '../i18n/routes';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  items: readonly Experience[];
+}
+
+const { lang, items } = Astro.props;
+const [first, ...rest] = items;
+---
+<ol class="xp">
+  {first && (
+    <li class:list={['card', { 'is-current': first.end === null }]}>
+      <p class="period">{formatPeriod(first.start, first.end, lang)}</p>
+      <h3 class="title-strong">{first.role[lang]} · {first.company}</h3>
+      <ul class="tags">{first.tags.map((tag) => <li>{tag}</li>)}</ul>
+    </li>
+  )}
+  {rest.map((x) => (
+    <li class="xp-row">
+      <span class="period">{formatPeriod(x.start, x.end, lang)}</span>
+      <span class="title-strong">{x.role[lang]} · {x.company}</span>
+    </li>
+  ))}
+</ol>
+<a class="more" href={localizedPath(lang, { name: 'cv' })}>{t(lang, 'cv.full')}</a>
+
+<style>
+  .xp { list-style: none; margin: 0; padding: 0; display: grid; gap: .25rem; }
+  .xp p { margin: 0; }
+  .xp h3 { margin: .25rem 0 0; font-size: 1rem; }
+  .xp-row { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem; padding: .6rem 1.125rem; font-size: .9375rem; }
+  .xp-row .title-strong { font-weight: 500; }
+  @media (max-width: 520px) { .xp-row { grid-template-columns: 1fr; gap: 0; } }
+</style>

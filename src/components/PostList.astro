@@ -1,0 +1,28 @@
+---
+import type { Post } from '../lib/content';
+import { entrySlug } from '../lib/entries';
+import { formatDate } from '../lib/format';
+import { localizedPath } from '../i18n/routes';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  posts: readonly Post[];
+}
+
+const { lang, posts } = Astro.props;
+---
+<ol class="posts">
+  {posts.map((post) => (
+    <li>
+      <time class="period" datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+      <a class="title-strong" href={localizedPath(lang, { name: 'post', slug: entrySlug(post.id) })}>{post.data.title}</a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .posts { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+  li { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; align-items: baseline; }
+  @media (max-width: 520px) { li { grid-template-columns: 1fr; gap: 0; } }
+</style>

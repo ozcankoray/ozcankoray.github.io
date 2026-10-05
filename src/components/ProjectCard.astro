@@ -1,0 +1,35 @@
+---
+import type { Project } from '../lib/content';
+import { entrySlug } from '../lib/entries';
+import { localizedPath } from '../i18n/routes';
+import { t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  project: Project;
+}
+
+const { lang, project } = Astro.props;
+const { title, summary, stack, status, year } = project.data;
+const href = localizedPath(lang, { name: 'project', slug: entrySlug(project.id) });
+---
+<article class="card project">
+  <div class="thumb mono" aria-hidden="true">{year}</div>
+  <div>
+    <h3 class="title-strong">
+      <a class="stretched" href={href}>{title}</a>
+      {status === 'live' && <span class="badge">{t(lang, 'project.live')}</span>}
+    </h3>
+    <p class="summary">{summary}</p>
+    <ul class="tags">{stack.map((s) => <li>{s.toLowerCase()}</li>)}</ul>
+  </div>
+</article>
+
+<style>
+  .project { position: relative; display: grid; grid-template-columns: 5.5rem 1fr; gap: 1rem; }
+  .thumb { height: 3.75rem; border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; font-size: .75rem; color: var(--faint); }
+  h3 { margin: 0; font-size: 1rem; }
+  .stretched::after { content: ''; position: absolute; inset: 0; }
+  .summary { margin: .25rem 0 0; color: var(--muted); font-size: .9375rem; }
+  @media (max-width: 520px) { .project { grid-template-columns: 1fr; } .thumb { display: none; } }
+</style>
