@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROUTES } from './routes';
+import { containsHashed, SECRETS } from '../forbidden';
 
 const SITE = 'https://korayozcan.me';
 
@@ -76,8 +77,7 @@ test('built site contains no private contact data', () => {
   const files = walk('dist').filter((f) => /\.(html|xml|txt|json)$/.test(f));
   expect(files.length).toBeGreaterThan(10);
   for (const file of files) {
-    const text = readFileSync(file, 'utf8');
-    expect(/0000000000|506\s*102\s*77\s*57|REDACTED/i.test(text), file).toBe(false);
+    expect(containsHashed(readFileSync(file, 'utf8'), SECRETS), file).toBe(false);
   }
 });
 

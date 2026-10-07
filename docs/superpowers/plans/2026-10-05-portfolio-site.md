@@ -15,7 +15,7 @@
 - Node 22, `astro@^7.3.5`, TypeScript `strict` (via `astro/tsconfigs/strict`). Never use `any`; use `unknown` and narrow.
 - `trailingSlash: 'always'`: every internal page link ends with `/`. File links (`.pdf`, `.png`, `.xml`) do not.
 - TR is the default language at `/`; EN lives under `/en/`. Path segments: `projeler`↔`projects`, `yazilar`↔`writing`, `cv`↔`cv`. Content slugs are identical in both languages.
-- The phone number (`0000000000`, any formatting) and home address (`REDACTED`) must never appear in `src/`, `public/`, `github/`, or `dist/`. Contact is email `korayozcan33@gmail.com` and LinkedIn only.
+- The phone number (any formatting) and home district must never appear in `src/`, `public/`, `github/`, or `dist/`. Contact is email `korayozcan33@gmail.com` and LinkedIn only.
 - Nerdi's privacy policy lives at `https://nerdi.pages.dev/privacy.html` (the URL used on its App Store listing). The `nerdio` repo is a different, inactive app and is not featured, linked or pinned.
 - Exactly three projects: `kap-fund-analytics`, `nerdi`, `food-inflation-tracker`. No GitHub links to private repos.
 - Color tokens are fixed exactly as written in Task 5. Fonts are Inter + JetBrains Mono from @fontsource only.
@@ -578,8 +578,8 @@ describe('format', () => {
 import { describe, it, expect } from 'vitest';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { containsHashed, SECRETS } from '../forbidden';
 
-const FORBIDDEN = [/0000000000/, /506\s*102\s*77\s*57/, /REDACTED/i];
 const TEXT = /\.(astro|ts|mjs|js|md|mdx|css|json|txt|svg|html|xml)$/;
 
 const walk = (dir: string): readonly string[] =>
@@ -594,8 +594,7 @@ describe('privacy', () => {
     const files = ['src', 'public', 'github'].flatMap(walk).filter((f) => TEXT.test(f));
     expect(files.length).toBeGreaterThan(0);
     for (const file of files) {
-      const text = readFileSync(file, 'utf8');
-      for (const pattern of FORBIDDEN) expect(pattern.test(text), `${pattern} in ${file}`).toBe(false);
+      expect(containsHashed(readFileSync(file, 'utf8'), SECRETS), file).toBe(false);
     }
   });
 });
@@ -3302,8 +3301,7 @@ test('built site contains no private contact data', () => {
   const files = walk('dist').filter((f) => /\.(html|xml|txt|json)$/.test(f));
   expect(files.length).toBeGreaterThan(10);
   for (const file of files) {
-    const text = readFileSync(file, 'utf8');
-    expect(/0000000000|506\s*102\s*77\s*57|REDACTED/i.test(text), file).toBe(false);
+    expect(containsHashed(readFileSync(file, 'utf8'), SECRETS), file).toBe(false);
   }
 });
 ```
