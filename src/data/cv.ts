@@ -38,8 +38,17 @@ export const experience: readonly Experience[] = [
     kind: 'full-time',
     start: '2026-08',
     end: null,
-    bullets: [],
-    tags: ['test automation', 'quality engineering'],
+    bullets: [
+      {
+        tr: 'İç ve dış uygulamalar için Selenium ve Playwright ile test otomasyonu geliştiriyorum.',
+        en: 'Automate tests for internal and external applications with Selenium and Playwright.',
+      },
+      {
+        tr: 'Test kodunu Java ile yazıyorum; hataları ve işleri Jira’da takip ediyorum.',
+        en: 'Write test code in Java and track defects and tasks in Jira.',
+      },
+    ],
+    tags: ['test automation', 'selenium', 'playwright', 'java', 'jira'],
   },
   {
     id: 'odeal-ba',
