@@ -32,6 +32,19 @@ test('private projects have no GitHub links', async ({ page }) => {
   }
 });
 
+test('projects without public links say their source is private', async ({ page }) => {
+  const cases = [
+    { path: '/projeler/kap-fund-analytics/', note: 'Kaynak kod özel.' },
+    { path: '/en/projects/food-inflation-tracker/', note: 'Source code is private.' },
+  ];
+  for (const { path, note } of cases) {
+    await page.goto(path);
+    await expect(page.getByText(note)).toHaveCount(1);
+  }
+  await page.goto('/en/projects/nerdi/');
+  await expect(page.getByText('Source code is private.')).toHaveCount(0);
+});
+
 test('flow diagram stacks vertically on a phone', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 780 });
   await page.goto('/projeler/kap-fund-analytics/');
