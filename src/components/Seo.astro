@@ -2,6 +2,7 @@
 import { OG_LOCALE, OTHER, t, type Lang } from '../i18n/ui';
 import { localizedPath, ogImagePath, rssPath, type Route } from '../i18n/routes';
 import { profile } from '../data/profile';
+import { getPosts } from '../lib/content';
 
 interface Props {
   lang: Lang;
@@ -13,6 +14,7 @@ interface Props {
 const { lang, route, title, description } = Astro.props;
 const site = Astro.site ?? new URL(profile.site);
 const abs = (path: string): string => new URL(path, site).toString();
+const hasPosts = (await getPosts(lang)).length > 0;
 const fullTitle = title === profile.name ? title : `${title} — ${profile.name}`;
 ---
 <title>{fullTitle}</title>
@@ -38,4 +40,4 @@ const fullTitle = title === profile.name ? title : `${title} — ${profile.name}
 <meta property="og:locale" content={OG_LOCALE[lang]} />
 <meta property="og:locale:alternate" content={OG_LOCALE[OTHER[lang]]} />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="alternate" type="application/rss+xml" title={`${profile.name} — ${t(lang, 'writing.title')}`} href={rssPath(lang)} />
+{hasPosts && <link rel="alternate" type="application/rss+xml" title={`${profile.name} — ${t(lang, 'writing.title')}`} href={rssPath(lang)} />}
