@@ -20,4 +20,4 @@ A Python job collects prices from the public marketfiyati.org.tr API on a regula
 
 ## What I learned
 
-Collecting the data is the easy part. The method — matching products, handling missing prices, choosing weights — decides whether the final number means anything.
+Collecting the data is the easy part. The method (matching products, handling missing prices, choosing weights) decides whether the final number means anything.

@@ -33,8 +33,8 @@ test('project pages describe themselves in JSON-LD', async ({ page }) => {
 
 test('home titles say what the person does', async ({ page }) => {
   const titles = [
-    { path: '/', title: 'Koray Özcan — Test Otomasyonu ve Kalite Mühendisi' },
-    { path: '/en/', title: 'Koray Özcan — Test Automation & QA Engineer' },
+    { path: '/', title: 'Koray Özcan | Test Otomasyonu ve Kalite Mühendisi' },
+    { path: '/en/', title: 'Koray Özcan | Test Automation & QA Engineer' },
   ];
   for (const { path, title } of titles) {
     await page.goto(path);

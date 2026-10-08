@@ -5,7 +5,7 @@ export interface HashedSecrets {
   readonly words: readonly string[];
 }
 
-// SHA-256 of the private phone number (digits only) and district (folded). Hashes only — never the values.
+// SHA-256 of the private phone number (digits only) and district (folded). Hashes only, never the values.
 export const SECRETS: HashedSecrets = {
   digits: ['c2e6da10eaa0b4df8e4943cce72bda41969e65c265f9ad045075b78ea1c59250'],
   words: ['50a46960be7e6078769cf41fdcff18becda376d91a22d26f1e2b4b18dd2d98fd'],

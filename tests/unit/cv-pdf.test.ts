@@ -23,6 +23,10 @@ describe.each(LANGS)('cv pdf (%s)', (lang) => {
     expect(containsHashed(text, SECRETS)).toBe(false);
   });
 
+  it('has no em dash', () => {
+    expect(text).not.toContain(String.fromCharCode(0x2014));
+  });
+
   it('is up to date with the cv data', () => {
     const missing = expected(lang).filter((s) => !text.includes(squash(s)));
     const missingSkills = skills.filter((s) => !text.toLowerCase().includes(s.toLowerCase()));

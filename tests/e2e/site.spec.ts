@@ -81,6 +81,13 @@ test('built site contains no private contact data', () => {
   }
 });
 
+test('built site has no em dash', () => {
+  const files = walk('dist').filter((f) => /\.(html|xml|txt|json)$/.test(f));
+  expect(files.length).toBeGreaterThan(10);
+  const offenders = files.filter((f) => readFileSync(f, 'utf8').includes(String.fromCharCode(0x2014)));
+  expect(offenders).toEqual([]);
+});
+
 test('pages have no render-blocking external stylesheets', async ({ page }) => {
   for (const route of ROUTES) {
     await page.goto(route.path);

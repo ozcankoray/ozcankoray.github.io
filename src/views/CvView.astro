@@ -16,7 +16,7 @@ const { lang } = Astro.props;
   <div class="cv">
     <header class="cv-head">
       <div class="print-only">
-        <p class="print-name">{profile.name} — {t(lang, 'role')}</p>
+        <p class="print-name">{profile.name} | {t(lang, 'role')}</p>
         <p class="mono">{profile.email} · korayozcan.me · linkedin.com/in/korayözcan</p>
       </div>
       <h1 class="page-title">{t(lang, 'cv.title')}</h1>
@@ -84,7 +84,7 @@ const { lang } = Astro.props;
 
     <section class="block" aria-labelledby="cv-langs">
       <h2 id="cv-langs" class="label">{t(lang, 'cv.languages')}</h2>
-      <ul class="plain">{languages.map((l) => <li>{l.name[lang]} — {l.level[lang]}</li>)}</ul>
+      <ul class="plain">{languages.map((l) => <li>{l.name[lang]}: {l.level[lang]}</li>)}</ul>
     </section>
   </div>
 </Split>

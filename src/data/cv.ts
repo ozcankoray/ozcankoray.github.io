@@ -134,7 +134,7 @@ export const experience: readonly Experience[] = [
   {
     id: 'bfrc-ra',
     role: { tr: 'Öğrenci Araştırma Asistanı', en: 'Student Research Assistant' },
-    company: 'BFRC — Bahçeşehir University Financial Research Center',
+    company: 'BFRC, Bahçeşehir University Financial Research Center',
     kind: 'part-time',
     start: '2025-01',
     end: '2026-06',
@@ -196,7 +196,7 @@ export const education: readonly Education[] = [
 ];
 
 export const programs: readonly Localized[] = [
-  { tr: 'YÖK Veri Analizi Okulu — Yapay Zekâ Bölümü', en: 'YÖK Data Analysis School — Artificial Intelligence Department' },
+  { tr: 'YÖK Veri Analizi Okulu, Yapay Zekâ Bölümü', en: 'YÖK Data Analysis School, Artificial Intelligence Department' },
   { tr: 'TÖDEB & Marmara Üniversitesi “Fintek Çırağı” Programı', en: 'TÖDEB & Marmara University “Fintech Apprentice” Program' },
 ];
 

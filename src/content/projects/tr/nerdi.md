@@ -1,6 +1,6 @@
 ---
 title: Nerdi
-summary: Her gün birkaç gerçek akademik makale sunan iPhone uygulaması — orijinal özetler, yapay zekâ özeti yok.
+summary: "Her gün birkaç gerçek akademik makale sunan iPhone uygulaması: orijinal özetler, yapay zekâ özeti yok."
 year: 2026
 stack: [iOS, OpenAlex, Uygulama içi abonelik]
 status: live

@@ -8,7 +8,7 @@ import { t, type Lang } from '../i18n/ui';
 export async function feed(lang: Lang, site: URL | undefined): Promise<Response> {
   const posts = await getPosts(lang);
   return rss({
-    title: `${profile.name} — ${t(lang, 'writing.title')}`,
+    title: `${profile.name} | ${t(lang, 'writing.title')}`,
     description: t(lang, 'writing.description'),
     site: site ?? profile.site,
     items: posts.map((post) => ({

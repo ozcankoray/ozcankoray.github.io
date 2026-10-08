@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { containsHashed, type HashedSecrets } from '../forbidden';
 
-// Hashes of the stand-ins "1234567890" and "testville" — never real data.
+// Hashes of the stand-ins "1234567890" and "testville", never real data.
 const FAKE: HashedSecrets = {
   digits: ['c775e7b757ede630cd0aa1113bd102661ab38829ca52a6422ab782862f268646'],
   words: ['7a1ca31106c2f8d865b48d1d39c89921a4212dae78df3b8856f93b4bbbdf040f'],

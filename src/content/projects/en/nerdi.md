@@ -1,6 +1,6 @@
 ---
 title: Nerdi
-summary: An iPhone app that serves a few real research papers a day — original abstracts, no AI summaries.
+summary: "An iPhone app that serves a few real research papers a day: original abstracts, no AI summaries."
 year: 2026
 stack: [iOS, OpenAlex, In-app subscriptions]
 status: live
@@ -18,7 +18,7 @@ Keeping up with research is hard, and most paper apps replace the abstract with 
 
 ## Approach
 
-Nerdi pulls papers from OpenAlex across twelve fields and shows each one with its real title, authors and original abstract, plus a link to the source — usually the PDF. It works without an account: saved papers and reading progress stay on the device. An optional Nerdi Plus subscription adds cross-device sync and an unlimited library.
+Nerdi pulls papers from OpenAlex across twelve fields and shows each one with its real title, authors and original abstract, plus a link to the source, usually the PDF. It works without an account: saved papers and reading progress stay on the device. An optional Nerdi Plus subscription adds cross-device sync and an unlimited library.
 
 ## What I learned
 

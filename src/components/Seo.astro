@@ -15,7 +15,7 @@ const { lang, route, title, description } = Astro.props;
 const site = Astro.site ?? new URL(profile.site);
 const abs = (path: string): string => new URL(path, site).toString();
 const hasPosts = (await getPosts(lang)).length > 0;
-const fullTitle = title.startsWith(profile.name) ? title : `${title} — ${profile.name}`;
+const fullTitle = title.startsWith(profile.name) ? title : `${title} | ${profile.name}`;
 ---
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
@@ -40,4 +40,4 @@ const fullTitle = title.startsWith(profile.name) ? title : `${title} — ${profi
 <meta property="og:locale" content={OG_LOCALE[lang]} />
 <meta property="og:locale:alternate" content={OG_LOCALE[OTHER[lang]]} />
 <meta name="twitter:card" content="summary_large_image" />
-{hasPosts && <link rel="alternate" type="application/rss+xml" title={`${profile.name} — ${t(lang, 'writing.title')}`} href={rssPath(lang)} />}
+{hasPosts && <link rel="alternate" type="application/rss+xml" title={`${profile.name} | ${t(lang, 'writing.title')}`} href={rssPath(lang)} />}

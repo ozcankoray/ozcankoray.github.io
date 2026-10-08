@@ -30,7 +30,7 @@ const sections: readonly SectionId[] = [
 ];
 const number = (id: SectionId): string => String(sections.indexOf(id) + 1).padStart(2, '0');
 ---
-<Split lang={lang} route={{ name: 'home' }} title={`${profile.name} — ${t(lang, 'home.tagline')}`} description={profile.intro[lang]}>
+<Split lang={lang} route={{ name: 'home' }} title={`${profile.name} | ${t(lang, 'home.tagline')}`} description={profile.intro[lang]}>
   <script type="application/ld+json" set:html={homeJsonLd(lang)} />
   <SectionNav slot="nav" lang={lang} sections={sections} />
 

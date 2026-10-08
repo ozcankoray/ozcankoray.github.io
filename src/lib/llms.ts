@@ -59,7 +59,7 @@ export function buildLlmsIndex(projects: readonly ProjectDoc[]): string {
 }
 
 const jobBlock = (x: Experience, lang: Lang): readonly string[] => [
-  `#### ${x.role[lang]} — ${x.company} (${formatPeriod(x.start, x.end, lang)}, ${KIND_LABEL[x.kind][lang]})`,
+  `#### ${x.role[lang]}, ${x.company} (${formatPeriod(x.start, x.end, lang)}, ${KIND_LABEL[x.kind][lang]})`,
   ...x.bullets.map((b) => `- ${b[lang]}`),
   '',
 ];
@@ -99,7 +99,7 @@ const languageSection = (lang: Lang, projects: readonly ProjectDoc[]): readonly 
 
 export function buildLlmsFull(projects: readonly ProjectDoc[]): string {
   return [
-    `# ${profile.name} — full content`,
+    `# ${profile.name}: full content`,
     '',
     `Source: ${profile.site}/ (English and Turkish). Short index: ${abs('/llms.txt')}`,
     '',
