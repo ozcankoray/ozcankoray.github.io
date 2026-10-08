@@ -33,6 +33,7 @@ const { lang, route, title, description } = Astro.props;
       } catch (e) {}
     </script>
     <Seo lang={lang} route={route} title={title} description={description} />
+    <script is:inline async data-goatcounter="https://koray.goatcounter.com/count" src="//gc.zgo.at/count.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">{t(lang, 'skip')}</a>

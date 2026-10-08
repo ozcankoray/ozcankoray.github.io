@@ -104,3 +104,15 @@ test('profile README links point to real pages', async ({ request }) => {
     expect(res.status(), path).toBe(200);
   }
 });
+
+test('every page loads GoatCounter exactly once, asynchronously', async ({ page }) => {
+  await page.route('**/gc.zgo.at/**', (route) => route.abort());
+  for (const route of ROUTES) {
+    await page.goto(route.path);
+    const script = page.locator('script[data-goatcounter]');
+    await expect(script, route.path).toHaveCount(1);
+    await expect(script).toHaveAttribute('data-goatcounter', 'https://koray.goatcounter.com/count');
+    await expect(script).toHaveAttribute('src', '//gc.zgo.at/count.js');
+    await expect(script).toHaveAttribute('async', '');
+  }
+});
