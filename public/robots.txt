@@ -1,3 +1,21 @@
 User-agent: *
 Allow: /
+
+# AI crawlers are welcome: training, search and on-demand fetches.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-User
+User-agent: Claude-SearchBot
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: Meta-ExternalAgent
+User-agent: Amazonbot
+Allow: /
+
 Sitemap: https://korayozcan.me/sitemap-index.xml
