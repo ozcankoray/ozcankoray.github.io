@@ -51,3 +51,19 @@ test('writing shows up in the sitemap and head only when it has posts', async ({
     await expect(page.locator('link[type="application/rss+xml"]')).toHaveCount(hasPosts ? 1 : 0);
   }
 });
+
+test('llms.txt and llms-full.txt are plain text and every link in llms.txt resolves', async ({ request }) => {
+  const full = await request.get('/llms-full.txt');
+  expect(full.status()).toBe(200);
+  expect(full.headers()['content-type']).toContain('text/plain');
+  expect(await full.text()).toContain('Nerdi');
+
+  const index = await request.get('/llms.txt');
+  expect(index.status()).toBe(200);
+  expect(index.headers()['content-type']).toContain('text/plain');
+  const text = await index.text();
+  expect(text.startsWith('# Koray Özcan')).toBe(true);
+  const urls = [...text.matchAll(/\]\((https:\/\/korayozcan\.me[^)]*)\)/g)].map((m) => m[1] ?? '');
+  expect(urls.length).toBeGreaterThan(10);
+  for (const url of urls) expect((await request.get(new URL(url).pathname)).status(), url).toBe(200);
+});
