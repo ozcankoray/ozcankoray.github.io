@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { publishedSlugs } from './content-files';
 
 test('og images exist for home and a project', async ({ page, request }) => {
@@ -12,10 +12,35 @@ test('og images exist for home and a project', async ({ page, request }) => {
   }
 });
 
-test('home includes Person JSON-LD', async ({ page }) => {
-  await page.goto('/en/');
+const jsonLd = async (page: Page): Promise<Record<string, unknown>> => {
   const raw = await page.locator('script[type="application/ld+json"]').textContent();
-  expect(JSON.parse(raw ?? '{}')['@type']).toBe('Person');
+  return JSON.parse(raw ?? '{}');
+};
+
+test('home includes Person, WebSite and ProfilePage JSON-LD', async ({ page }) => {
+  await page.goto('/en/');
+  const data = await jsonLd(page);
+  const types = (data['@graph'] as ReadonlyArray<{ '@type': string }>).map((n) => n['@type']);
+  expect(types).toEqual(['Person', 'WebSite', 'ProfilePage']);
+});
+
+test('project pages describe themselves in JSON-LD', async ({ page }) => {
+  await page.goto('/en/projects/nerdi/');
+  expect(await jsonLd(page)).toMatchObject({ '@type': 'MobileApplication', operatingSystem: 'iOS' });
+  await page.goto('/projeler/kap-fund-analytics/');
+  expect(await jsonLd(page)).toMatchObject({ '@type': 'CreativeWork', inLanguage: 'tr' });
+});
+
+test('home titles say what the person does', async ({ page }) => {
+  const titles = [
+    { path: '/', title: 'Koray Özcan — Test Otomasyonu ve Kalite Mühendisi' },
+    { path: '/en/', title: 'Koray Özcan — Test Automation & QA Engineer' },
+  ];
+  for (const { path, title } of titles) {
+    await page.goto(path);
+    await expect(page).toHaveTitle(title);
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', title);
+  }
 });
 
 test('sitemap lists both languages', async ({ request }) => {

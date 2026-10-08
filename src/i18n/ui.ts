@@ -6,6 +6,7 @@ export const OG_LOCALE: Readonly<Record<Lang, string>> = { tr: 'tr_TR', en: 'en_
 
 const tr = {
   role: 'Bilgisayar Mühendisi',
+  'home.tagline': 'Test Otomasyonu ve Kalite Mühendisi',
   skip: 'İçeriğe geç',
   'nav.label': 'Bölümler',
   'nav.about': 'hakkında',
@@ -46,6 +47,7 @@ export type UiKey = keyof typeof tr;
 
 const en: Readonly<Record<UiKey, string>> = {
   role: 'Computer Engineer',
+  'home.tagline': 'Test Automation & QA Engineer',
   skip: 'Skip to content',
   'nav.label': 'Sections',
   'nav.about': 'about',

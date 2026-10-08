@@ -4,6 +4,7 @@ import Split from '../layouts/Split.astro';
 import FlowDiagram from '../components/FlowDiagram.astro';
 import type { Project } from '../lib/content';
 import { entrySlug } from '../lib/entries';
+import { projectJsonLd } from '../lib/jsonld';
 import { localizedPath } from '../i18n/routes';
 import { t, type Lang } from '../i18n/ui';
 
@@ -29,6 +30,7 @@ const linkItems: readonly LinkItem[] = [
 ];
 ---
 <Split lang={lang} route={{ name: 'project', slug }} title={title} description={summary}>
+  <script type="application/ld+json" set:html={projectJsonLd(lang, { slug, title, summary, year, stack, kind: project.data.kind, links })} />
   <article>
     <a class="more back" href={`${localizedPath(lang, { name: 'home' })}#projects`}>{t(lang, 'project.back')}</a>
     <header class="head">

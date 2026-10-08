@@ -15,7 +15,7 @@ const { lang, route, title, description } = Astro.props;
 const site = Astro.site ?? new URL(profile.site);
 const abs = (path: string): string => new URL(path, site).toString();
 const hasPosts = (await getPosts(lang)).length > 0;
-const fullTitle = title === profile.name ? title : `${title} — ${profile.name}`;
+const fullTitle = title.startsWith(profile.name) ? title : `${title} — ${profile.name}`;
 ---
 <title>{fullTitle}</title>
 <meta name="description" content={description} />

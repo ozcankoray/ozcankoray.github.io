@@ -8,7 +8,7 @@ import PostList from '../components/PostList.astro';
 import { profile } from '../data/profile';
 import { internships, jobs } from '../data/cv';
 import { getPosts, getProjects } from '../lib/content';
-import { personJsonLd } from '../lib/jsonld';
+import { homeJsonLd } from '../lib/jsonld';
 import { localizedPath } from '../i18n/routes';
 import { t, type Lang } from '../i18n/ui';
 
@@ -30,8 +30,8 @@ const sections: readonly SectionId[] = [
 ];
 const number = (id: SectionId): string => String(sections.indexOf(id) + 1).padStart(2, '0');
 ---
-<Split lang={lang} route={{ name: 'home' }} title={profile.name} description={profile.intro[lang]}>
-  <script type="application/ld+json" set:html={personJsonLd(lang)} />
+<Split lang={lang} route={{ name: 'home' }} title={`${profile.name} — ${t(lang, 'home.tagline')}`} description={profile.intro[lang]}>
+  <script type="application/ld+json" set:html={homeJsonLd(lang)} />
   <SectionNav slot="nav" lang={lang} sections={sections} />
 
   <section id="about" class="section" aria-labelledby="about-label">
