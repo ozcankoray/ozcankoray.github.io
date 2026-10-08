@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { execFileSync } from 'node:child_process';
-import { education, experience } from '../../src/data/cv';
+import { education, experience, skills } from '../../src/data/cv';
 import { containsHashed, SECRETS } from '../forbidden';
 
 type Lang = 'tr' | 'en';
@@ -25,6 +25,7 @@ describe.each(LANGS)('cv pdf (%s)', (lang) => {
 
   it('is up to date with the cv data', () => {
     const missing = expected(lang).filter((s) => !text.includes(squash(s)));
-    expect(missing).toEqual([]);
+    const missingSkills = skills.filter((s) => !text.toLowerCase().includes(s.toLowerCase()));
+    expect([...missing, ...missingSkills]).toEqual([]);
   });
 });

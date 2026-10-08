@@ -201,7 +201,7 @@ export const programs: readonly Localized[] = [
 ];
 
 export const skills: readonly string[] = [
-  'Python', 'C++', 'SQL', 'Test Automation', 'Deep Learning', 'Agile', 'Jira', 'Confluence', 'Documentation',
+  'Python', 'Java', 'C++', 'SQL', 'Test Automation', 'Selenium', 'Playwright', 'Deep Learning', 'Agile', 'Jira', 'Confluence', 'Documentation',
 ];
 
 export const languages: readonly SpokenLanguage[] = [
